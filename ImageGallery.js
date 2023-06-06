@@ -5,6 +5,21 @@ class ImageGallery {
         this.config = config
     }
 
+    #onEndVisible(galleryEnd, imageContainer, callback) {
+
+        const observer = new IntersectionObserver(entries => {
+            for (const entry of entries) {
+                if (!entry.isIntersecting) {
+                    continue
+                }
+
+                callback()
+            }
+        })
+
+        observer.observe(galleryEnd)
+    }
+
     #renderImageElement(parent, imageUrl) {
 
         const imageContainer = document.createElement('div')
@@ -39,6 +54,10 @@ class ImageGallery {
         galleryEnd.setAttribute('id', 'end')
         galleryElement.appendChild(imageContainer)
         galleryElement.appendChild(galleryEnd)
+
+        this.#onEndVisible(galleryEnd, imageContainer, () => {
+            this.#appendImages(imageContainer, this.config.imagesAtOnce, this.config.adapter)
+        })
 
         this.#appendImages(imageContainer, this.config.imagesAtOnce, this.config.adapter)
     }
