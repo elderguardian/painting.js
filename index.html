@@ -15,6 +15,7 @@
 
     const gallery = new ImageGallery('#gallery', {
         adapter: newImage,
+        imagesAtOnce: 10,
     })
 
     gallery.render()
