@@ -5,6 +5,13 @@ class ImageGallery {
         this.config = config
     }
 
+    #enableVerticalScrolling(element, speed) {
+        element.addEventListener('wheel', (ev) => {
+            ev.preventDefault()
+            element.scrollBy((ev.deltaY + ev.deltaX) * speed, 0)
+        })
+    }
+
     #onEndVisible(galleryEnd, imageContainer, callback) {
 
         const observer = new IntersectionObserver(entries => {
@@ -54,6 +61,8 @@ class ImageGallery {
         galleryEnd.setAttribute('id', 'end')
         galleryElement.appendChild(imageContainer)
         galleryElement.appendChild(galleryEnd)
+
+        this.#enableVerticalScrolling(window, this.config.scrollingSpeed)
 
         this.#onEndVisible(galleryEnd, imageContainer, () => {
             this.#appendImages(imageContainer, this.config.imagesAtOnce, this.config.adapter)
